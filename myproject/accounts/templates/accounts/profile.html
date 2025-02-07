@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필</title>
+</head>
+<body>
+    <h2>프로필 페이지</h2>
+    <p>안녕하세요, {{user.username}} 님! 미궁게임에 오신걸 환영합니다</p>
+    <p>이메일 : {{user.email}}</p>
+    <p>가입일 : {{user.date_joined}}</p>
+
+    {% if user.profile.birth_date %}
+        <p>생년월일: {{ user.profile.birth_date}}</p> <!--회원의 생년월일 출력-->
+    {% else %}
+        <p>생년월일: 입력되지 않음</p>
+    {% endif %}
+
+    {% if user.profile.profile_image %}
+        <p>프로필 사진 :</p>
+        <img src="{{ user.profile.profile_image.url }}" width="150" height="150">
+        <!--{{ user.profile.profile_image.url }} 회원의 프로필 사진 출력 -->
+    {% else %}
+        <p>프로필 사진 없음</p> <!--프로필 사진이 없을 경우 프로필 사진 없음으로 표시-->
+    {% endif %}
+
+    <a href="{% url 'password_change' %}">비밀번호 변경</a> <!--프로필 비밀번호 변경 링크 추가-->
+    <a href="{% url 'logout' %}">로그아웃</a>
+</body>
+</html>

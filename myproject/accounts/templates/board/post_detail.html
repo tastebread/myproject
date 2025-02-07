@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ post.title }}</h2>
+    <p>작성자: {{ post.author }}</p>
+    <p>작성일: {{ post.created_at }}</p>
+    <hr>
+    <p>{{ post.content }}</p>
+
+    {% if user == post.author %}
+        <a href="{% url 'post_edit' post.id %}"><button>수정</button></a>
+        <a href="{% url 'post_delete' post.id %}"><button>삭제</button></a>
+    {% endif %}
+    
+    <h3>댓글</h3>
+    <ul>
+        {% for comment in post.comments.all %} <!--게시글에 달린 모든 댓글 출력-->
+            <li><strong>{{ comment.author }}</strong>: {{ comment.content }} ({{ comment.created_at }})</li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %} <!--로그인한 사용자만 댓글 작성 가능-->
+        <form method="post" action="{% url 'add_comment' post.id %}"> <!--댓글 작성 폼 추가-->
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">댓글 작성</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">로그인</a> 후 댓글을 작성할 수 있습니다.</p>
+    {% endif %}
+
+    <a href="{% url 'post_list' %}"><button>목록으로</button></a>
+{% endblock %}
