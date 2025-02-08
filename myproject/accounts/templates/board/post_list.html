@@ -3,14 +3,53 @@
 
 {% block content %}
     <h2>게시판</h2>
-    <a href="{% url 'post_create' %}"><button>새 글 작성</button></a>
-    <div class="board">
-        <ul>
-            {% for post in posts %}
-                <li>
-                    <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a> - {{ post.author }} ({{ post.created_at }})
-                </li>
-            {% endfor %}
-        </ul>
+
+    <!-- 검색 폼 추가 -->
+    <form method="GET" action="{% url 'post_list' %}">
+        <input type="text" name="q" value="{{ query|default_if_none:'' }}" placeholder="검색어 입력">
+        <button type="submit">검색</button>
+    </form>
+
+    <!-- 카테고리 선택 -->
+    <div class="category-filter">
+        <a href="{% url 'post_list' %}" class="{% if not selected_category %}active{% endif %}">전체</a>
+        {% for category in categories %}
+            <a href="{% url 'post_list' %}?category={{ category.name }}" class="{% if category.name == selected_category %}active{% endif %}">
+                {{ category.name }}
+            </a>
+        {% endfor %}
     </div>
+    
+    <!-- 정렬 옵션 -->
+    <div class="sort-options">
+        <a href="?q={{ query|default_if_none:'' }}&sort=latest" class="{% if sort_option == 'latest' %}active{% endif %}">최신순</a>
+        <a href="?q={{ query|default_if_none:'' }}&sort=oldest" class="{% if sort_option == 'oldest' %}active{% endif %}">오래된순</a>
+        <a href="?q={{ query|default_if_none:'' }}&sort=views" class="{% if sort_option == 'views' %}active{% endif %}">조회수순</a>
+        <a href="?q={{ query|default_if_none:'' }}&sort=comments" class="{% if sort_option == 'comments' %}active{% endif %}">댓글 많은 순</a>
+    </div>
+
+    <a href="{% url 'post_create' %}"><button>새 글 작성</button></a>
+
+    <!-- 게시글 목록 -->
+    <ul class="post-list">
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a> 
+                - {{ post.author }} ({{ post.created_at|date:"Y-m-d H:i" }})  
+                | 조회수: {{ post.views }} | 댓글: {{ post.comments.count }}
+
+                <!-- 태그 목록 표시 -->
+                <p>
+                    태그:
+                    {% for tag in post.tags.all %}
+                        <a href="{% url 'post_list' %}?tag={{ tag.name }}" class="tag">{{ tag.name }}</a>
+                    {% empty %}
+                        없음
+                    {% endfor %}
+                </p>
+            </li>
+        {% empty %}
+            <li>게시글이 없습니다.</li>
+        {% endfor %}
+    </ul>
 {% endblock %}

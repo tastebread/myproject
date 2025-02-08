@@ -4,6 +4,7 @@ from django.contrib.auth.views import (
     PasswordResetView,PasswordResetDoneView,
     PasswordResetConfirmView,PasswordResetCompleteView
 )
+from .views import profile_view,profile_edit
 
 from .views import signup,profile
 from accounts.views import home
@@ -24,4 +25,9 @@ urlpatterns = [
     path('password_reset_confirm/', PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'), name='password_reset_confirm'),
     #비밀번호 재설정 완료 페이지
     path('password_reset_complete/', PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'), name='password_reset_complete'),
+    #프로필 수정 페이지
+    path('profile/edit/', profile_edit, name='profile_edit'), 
+    #특정 유저의 프로필
+    path('profile/<str:username>/', profile_view, name='profile'),
+
 ]

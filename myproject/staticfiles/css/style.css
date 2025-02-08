@@ -1,0 +1,263 @@
+/* 전체 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+/* 컨테이너 (전체 레이아웃) */
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+/* 네비게이션 스타일 */
+nav {
+    background-color: #007bff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* 버튼 스타일 */
+button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* 링크 스타일 */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 게시판 스타일 */
+.board {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 댓글 스타일 */
+
+/* 각 댓글을 박스 스타일로 정리 */
+.comment-box {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 4px solid #007bff;
+}
+
+.comment-box strong {
+    color: #007bff;
+}
+
+/* 댓글 수정 & 삭제 버튼을 깔끔하게 배치 */
+.comment-actions {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* 기존 스타일 수정 (수정, 삭제 버튼 따로 만들기) */
+.comment-actions a {
+    padding: 5px 8px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.comment-actions a:hover {
+    text-decoration: underline;
+}
+
+/* 수정 버튼 스타일 */
+.comment-actions .edit-btn {
+    background-color: #ffc107;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+.comment-actions .edit-btn:hover {
+    background-color: #e0a800;
+}
+
+/* 삭제 버튼 스타일 */
+.comment-actions .delete-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+.comment-actions .delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* 댓글 입력 폼 스타일 */
+.comment-form {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.comment-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.comment-form button:hover {
+    background-color: #0056b3;
+}
+
+/* 게시글 수정 & 삭제 버튼 스타일 */
+.post-actions {
+    margin-top: 5px;
+}
+
+.post-actions a {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* 수정 버튼 스타일 */
+.post-actions .edit-btn {
+    background-color: #ffc107;
+    color: black;
+    padding: 6px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.post-actions .edit-btn:hover {
+    background-color: #e0a800;
+}
+
+/* 삭제 버튼 스타일 */
+.post-actions .delete-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.post-actions .delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* 게시글 수정 & 삭제 안내 페이지 스타일 */
+.post-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+
+/* 제목 스타일 */
+.post-form h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 입력 필드 스타일 */
+.post-form input,
+.post-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* 버튼 스타일 */
+.post-form .btn {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.post-form .btn-edit {
+    background-color: #007bff;
+    color: white;
+}
+
+.post-form .btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.post-form .btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.post-form .btn-delete:hover {
+    background-color: #c82333;
+}
+
+.post-form .btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.post-form .btn-cancel:hover {
+    background-color: #5a6268;
+}

@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) # User와 1대1 관계
     birth_date = models.DateField(null=True, blank=True) #생년월일
-    profile_image = models.ImageField(upload_to='profile_image/', null=True, blank=True) #프로필 사진
+    profile_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True,verbose_name="자기소개") #프로필 사진
+    bio = models.TextField(blank=True, null=True) #자기소개 추가
 
     def __str__(self):
-        return self.user.username # 관리 페이지에서 보기 쉽게 표시
+        return f"{self.user.username}의 프로필 " # 관리 페이지에서 보기 쉽게 표시

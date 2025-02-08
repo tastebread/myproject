@@ -121,6 +121,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static') #프로젝트 내 static 폴더 설정
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #정적 파일 모으는 경로
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

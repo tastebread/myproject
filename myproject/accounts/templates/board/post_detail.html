@@ -6,29 +6,86 @@
     <p>작성자: {{ post.author }}</p>
     <p>작성일: {{ post.created_at }}</p>
     <hr>
+    {% if post.image%}
+        <img src="{{ post.image.url }}" alt="게시글 이미지" style="max-width: 100%; border-radius: 10px;">
+    {% endif %}
     <p>{{ post.content }}</p>
 
+    <!-- 좋아요 버튼 추카-->
+     <div>
+        <button id="like-btn" data-post-id="{{ post.id}}">
+            {% if user in post.likes.all %}
+                ❤️ 좋아요 취소
+            {% else %}
+                🤍 좋아요
+            {% endif %}
+        </button>
+        <span id="like-count">{{ post.likes.count }}</span>
+    </div>
+
     {% if user == post.author %}
-        <a href="{% url 'post_edit' post.id %}"><button>수정</button></a>
-        <a href="{% url 'post_delete' post.id %}"><button>삭제</button></a>
+        <div class="post-actions">
+            <a href="{% url 'post_edit' post.id %}" class="edit-btn">수정</a>
+            <a href="{% url 'post_delete' post.id %}" class="delete-btn">삭제</a>
+        </div>
     {% endif %}
     
     <h3>댓글</h3>
-    <ul>
-        {% for comment in post.comments.all %} <!--게시글에 달린 모든 댓글 출력-->
-            <li><strong>{{ comment.author }}</strong>: {{ comment.content }} ({{ comment.created_at }})</li>
-        {% endfor %}
-    </ul>
-
-    {% if user.is_authenticated %} <!--로그인한 사용자만 댓글 작성 가능-->
-        <form method="post" action="{% url 'add_comment' post.id %}"> <!--댓글 작성 폼 추가-->
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit">댓글 작성</button>
-        </form>
+    {% for comment in post.comments.all %}
+        <div class="comment-box">
+            <strong>{{ comment.author }}</strong>: {{ comment.content }}
+            <div class="comment-actions">
+                <small>{{ comment.created_at }}</small>
+                {% if user == comment.author %}
+                     <a href="{% url 'comment_edit' comment.id %}" class="edit-btn">수정</a>
+                     <a href="{% url 'comment_delete' comment.id %}" class="delete-btn">삭제</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    
+    {% if user.is_authenticated %}
+        <div class="comment-form">
+            <form method="post" action="{% url 'add_comment' post.id %}">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit">댓글 작성</button>
+            </form>
+        </div>
     {% else %}
         <p><a href="{% url 'login' %}">로그인</a> 후 댓글을 작성할 수 있습니다.</p>
     {% endif %}
 
     <a href="{% url 'post_list' %}"><button>목록으로</button></a>
+
+    <!-- 좋아요 기능을 위한 JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const likeBtn = document.getElementById("like-btn");
+            const likeCount = document.getElementById("like-count");
+            
+            likeBtn.addEventListener("click", function() {
+                const postId = likeBtn.getAttribute("data-post-id");
+                
+                fetch(`/board/post/${postId}/like/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "same-origin"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.liked) {
+                        likeBtn.innerHTML = "❤️ 좋아요 취소";
+                    } else {
+                        likeBtn.innerHTML = "🤍 좋아요";
+                    }
+                    likeCount.textContent = data.total_likes;
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        });
+    </script>
 {% endblock %}

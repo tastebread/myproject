@@ -44,11 +44,27 @@ class SignUpForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         if commit:
-            user.save()
-            profile = Profile.objects.create(
-                user=user,
-                birth_date=self.cleaned_data.get('birth_date'),  # 오타 수정 (birth_Date → birth_date)
-                profile_image=self.cleaned_data.get('profile_image')
-            )
-            profile.save()
+            user.save()  # ✅ 유저만 저장, Profile은 signals.py에서 자동 생성
+            user.profile.birth_date = self.cleaned_data.get('birth_date')
+            user.profile.profile_image = self.cleaned_data.get('profile_image')
+            user.profile.save()
         return user
+    
+class ProfileForm(forms.ModelForm):
+    birth_date = forms.DateField(
+        label="생년월일",
+        required=False,
+        widget=forms.DateInput(attrs={'type': 'date'})  #  날짜 입력 필드
+    )
+
+    class Meta:
+        model = Profile
+        fields = ['profile_image', 'birth_date', 'bio']  # 프로필 사진, 생년월일, 자기소개 필드 추가
+        labels = {
+            'profile_image': '프로필 사진',
+            'bio': '자기소개',
+        }
+        help_texts = {
+            'profile_image': '이미지를 업로드하세요.',
+            'bio': '자기소개를 입력하세요.',
+        }

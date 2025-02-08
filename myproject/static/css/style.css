@@ -30,34 +30,208 @@ nav a:hover {
     text-decoration: underline;
 }
 
-/*버튼 스타일 */
-button {
-    padding: 10px, 15px;
+/* 버튼 스타일 */
+button, .btn {
+    padding: 10px 15px;
     border: none;
-    background-color: #007bff;
-    color : white;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
 }
 
-button:hover {
+/* 기본 버튼 스타일 */
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
     background-color: #0056b3;
 }
 
-/*링크 스타일 */
-a {
+/* 수정 버튼 */
+.btn-edit {
+    background-color: #ffc107;
+    color: black;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+}
+
+/* 삭제 버튼 */
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* 검색 폼 스타일 */
+.search-form {
+    margin-bottom: 15px;
+}
+
+.search-form input {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-form button {
+    padding: 8px 12px;
+}
+
+/* 정렬 옵션 스타일 */
+.sort-options {
+    margin-bottom: 15px;
+}
+
+.sort-options a {
+    text-decoration: none;
+    color: #007bff;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #007bff;
+}
+
+.sort-options a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 게시글 목록 스타일 */
+.post-list {
+    list-style: none;
+    padding: 0;
+}
+
+.post-list li {
+    padding: 10px;
+    background-color: white;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border-left: 5px solid #007bff;
+}
+
+/* 댓글 스타일 */
+.comment-box {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 4px solid #007bff;
+}
+
+/* 댓글 수정 & 삭제 버튼 */
+.comment-actions {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* 프로필 페이지 스타일 */
+.profile-container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 프로필 이미지 */
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007bff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
+/* 사용자 정보 스타일 */
+.profile-info {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* 프로필 수정 버튼 */
+.profile-edit-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #ffc107;
+    color: black;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.profile-edit-btn:hover {
+    background-color: #e0a800;
+}
+
+/* 게시글 & 댓글 리스트 스타일 */
+.post-list, .comment-list {
+    list-style: none;
+    padding: 0;
+}
+
+.post-list li, .comment-list li {
+    background: #f8f9fa;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border-left: 4px solid #007bff;
+}
+
+/* 링크 스타일 */
+.post-list a, .comment-list a {
+    font-weight: bold;
     color: #007bff;
     text-decoration: none;
 }
 
-a:hover {
+.post-list a:hover, .comment-list a:hover {
     text-decoration: underline;
 }
 
-/*게시판 스타일 */
-.board {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+/* 프로필 페이지 추가 스타일 */
+.profile-actions {
+    margin-top: 15px;
+}
+
+.profile-actions a {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* 태그 스타일 */
+.tag {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.tag:hover {
+    background-color: #0056b3;
 }
