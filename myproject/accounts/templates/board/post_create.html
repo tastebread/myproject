@@ -4,16 +4,15 @@
 {% block content %}
     <div class="post-form">
         <h2>새 게시글 작성</h2>
-        <form method="post" enctype="multipart/form-data">  <!-- 파일 업로드를 위해 enctype 추가! -->
+
+        <!-- ✅ 불필요한 중복 제거 -->
+        <form method="post" enctype="multipart/form-data">  
             {% csrf_token %}
             {{ form.as_p }}
+            
+            <!-- ✅ 버튼 스타일一 -->
             <button type="submit" class="btn btn-primary">등록</button>
             <a href="{% url 'post_list' %}" class="btn btn-secondary">취소</a>
-        </form>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">저장</button>
         </form>
     </div>
 {% endblock %}

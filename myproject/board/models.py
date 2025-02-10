@@ -4,6 +4,10 @@ from django.db import models
 
 from django.contrib.auth.models import User
 
+def post_file_path(instance, filename):
+    """업로드된 파일을 저장할 경로 설정"""
+    return f'uploads/posts/{instance.author.username}/{filename}'
+
 #카테고리 모델
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True) # 카테고리 이름
@@ -19,19 +23,32 @@ class Tag(models.Model):
 
 #게시글 모델
 class Post(models.Model):
-    title = models.CharField(max_length=200) #글 제목
-    content = models.TextField() # 글 내용
+    title = models.CharField(max_length=200) #글내용
+    content = models.TextField() # 글제목
     author = models.ForeignKey(User, on_delete=models.CASCADE) # 작성자
     created_at = models.DateTimeField(auto_now_add=True) #작성 시간
     updated_at = models.DateTimeField(auto_now=True) # 수정 시간
     image = models.ImageField(upload_to='post_images/', blank=True, null=True) #이미지 필드 추가
     views = models.IntegerField(default=0) #조회수 필드 추가
-    tag = models.ManyToManyField(Tag, blank=True) # 태그 (다대다 관계)
+    tags = models.ManyToManyField(Tag, blank=True) # 태그 (다대다 관계)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts') # 카테고리 추가
 
+
+    #파일 업로드 필드 추가
+    attached_file = models.FileField(upload_to=post_file_path, blank=True, null=True)
+    #북마크 기능 추가
+    bookmarks = models.ManyToManyField(User, related_name="bookmarked_posts", blank=True)
     #좋아요 수 추가
     likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
 
+    def related_posts(self):
+        """ 태그가 겹치는 게시글 추천 """
+        return Post.objects.filter(tags__in=self.tags.all()).exclude(id=self.id).distinct()[:5]
+    
+    def popular_posts():
+        """ 조회수 & 좋아요 수 기반 인기 게시글 추천 """
+        return Post.objects.annotate(score=models.Count('likes') + models.F('views')).order_by('-score')[:5]
+    
     def __str__(self):
         return self.title
 

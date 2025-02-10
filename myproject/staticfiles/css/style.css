@@ -31,40 +31,215 @@ nav a:hover {
 }
 
 /* 버튼 스타일 */
-button {
+button, .btn {
     padding: 10px 15px;
     border: none;
-    background-color: #007bff;
-    color: white;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
 }
 
-button:hover {
+/* 기본 버튼 스타일 */
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
     background-color: #0056b3;
 }
 
-/* 링크 스타일 */
-a {
+/* 수정 버튼 */
+.btn-edit {
+    background-color: #ffc107;
+    color: black;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+}
+
+/* 삭제 버튼 */
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* 검색 폼 스타일 */
+.search-form {
+    margin-bottom: 15px;
+}
+
+.search-form input {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-form button {
+    padding: 8px 12px;
+}
+
+/* 정렬 옵션 스타일 */
+.sort-options {
+    margin-bottom: 15px;
+}
+
+.sort-options a {
+    text-decoration: none;
     color: #007bff;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #007bff;
+}
+
+.sort-options a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 카드 스타일 게시판 */
+.post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* 게시글 개별 카드 */
+.post-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    padding-bottom: 10px;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+}
+
+/* 카드 내 이미지 */
+.post-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 2px solid #007bff;
+}
+
+/* 카드 내용 */
+.post-content {
+    padding: 15px;
+}
+
+.post-content h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.post-content p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* 태그 디자인 개선 */
+.post-tags {
+    margin-top: 10px;
+}
+
+.tag {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 12px;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+.tag:hover {
+    background: #0056b3;
+}
+
+/* 게시글 상세 카드 스타일 */
+.post-container {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 게시글 상세 이미지 */
+.post-detail-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* 게시글 정보 (작성자, 날짜) */
+.post-meta {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+/* 첨부파일 다운로드 버튼 */
+.attached-file a {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
     text-decoration: none;
 }
 
-a:hover {
-    text-decoration: underline;
+.attached-file a:hover {
+    background: #0056b3;
 }
 
-/* 게시판 스타일 */
-.board {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+/* 좋아요 & 북마크 버튼 */
+.post-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
 }
 
-/* 댓글 스타일 */
+.btn-like, .btn-bookmark {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    transition: 0.3s;
+}
 
-/* 각 댓글을 박스 스타일로 정리 */
+.btn-like:hover {
+    background-color: #ffdddd;
+}
+
+.btn-bookmark:hover {
+    background-color: #d7f0ff;
+}
+
+/* 댓글 섹션 */
+.comments-section {
+    margin-top: 30px;
+}
+
+/* 댓글 박스 */
 .comment-box {
     background-color: #f9f9f9;
     padding: 10px;
@@ -73,58 +248,10 @@ a:hover {
     border-left: 4px solid #007bff;
 }
 
-.comment-box strong {
-    color: #007bff;
-}
-
-/* 댓글 수정 & 삭제 버튼을 깔끔하게 배치 */
-.comment-actions {
-    margin-top: 5px;
-    font-size: 14px;
-}
-
-/* 기존 스타일 수정 (수정, 삭제 버튼 따로 만들기) */
-.comment-actions a {
-    padding: 5px 8px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.comment-actions a:hover {
-    text-decoration: underline;
-}
-
-/* 수정 버튼 스타일 */
-.comment-actions .edit-btn {
-    background-color: #ffc107;
-    color: black;
-    padding: 5px 10px;
-    border-radius: 3px;
-}
-
-.comment-actions .edit-btn:hover {
-    background-color: #e0a800;
-}
-
-/* 삭제 버튼 스타일 */
-.comment-actions .delete-btn {
-    background-color: #dc3545;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 3px;
-}
-
-.comment-actions .delete-btn:hover {
-    background-color: #c82333;
-}
-
-/* 댓글 입력 폼 스타일 */
+/* 댓글 폼 스타일 */
 .comment-form {
-    margin-top: 20px;
-    padding: 15px;
     background-color: #f1f1f1;
+    padding: 15px;
     border-radius: 5px;
 }
 
@@ -150,14 +277,48 @@ a:hover {
     background-color: #0056b3;
 }
 
-/* 게시글 수정 & 삭제 버튼 스타일 */
-.post-actions {
-    margin-top: 5px;
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+    
+    .post-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .post-container {
+        width: 95%;
+        padding: 15px;
+    }
 }
 
-.post-actions a {
+/* 프로필 컨테이너 */
+.profile-container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 프로필 이미지 */
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007bff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
+/* 프로필 버튼 */
+.profile-actions a {
     display: inline-block;
-    padding: 8px 12px;
+    padding: 8px 15px;
     border-radius: 5px;
     text-decoration: none;
     font-size: 14px;
@@ -165,99 +326,71 @@ a:hover {
     margin-right: 5px;
 }
 
-/* 수정 버튼 스타일 */
-.post-actions .edit-btn {
-    background-color: #ffc107;
-    color: black;
-    padding: 6px 12px;
-    border-radius: 5px;
-    display: inline-block;
-    font-weight: bold;
+/* 페이지네이션 스타일 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-.post-actions .edit-btn:hover {
-    background-color: #e0a800;
-}
-
-/* 삭제 버튼 스타일 */
-.post-actions .delete-btn {
-    background-color: #dc3545;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 5px;
-    display: inline-block;
-    font-weight: bold;
-}
-
-.post-actions .delete-btn:hover {
-    background-color: #c82333;
-}
-
-/* 게시글 수정 & 삭제 안내 페이지 스타일 */
-.post-form {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: auto;
-    text-align: center;
-}
-
-/* 제목 스타일 */
-.post-form h2 {
-    color: #333;
-    margin-bottom: 20px;
-}
-
-/* 입력 필드 스타일 */
-.post-form input,
-.post-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-/* 버튼 스타일 */
-.post-form .btn {
-    display: inline-block;
-    padding: 10px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    border: none;
-    cursor: pointer;
+.pagination .btn {
+    padding: 8px 12px;
     margin: 5px;
-}
-
-.post-form .btn-edit {
+    border-radius: 5px;
     background-color: #007bff;
     color: white;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-.post-form .btn-edit:hover {
+.pagination .btn:hover {
     background-color: #0056b3;
 }
 
-.post-form .btn-delete {
-    background-color: #dc3545;
-    color: white;
+.pagination .current-page {
+    padding: 8px 12px;
+    font-weight: bold;
+    color: #333;
 }
 
-.post-form .btn-delete:hover {
-    background-color: #c82333;
+/*미궁게임 css*/
+.maze-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
 }
 
-.post-form .btn-cancel {
-    background-color: #6c757d;
-    color: white;
+.maze-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px;
 }
 
-.post-form .btn-cancel:hover {
-    background-color: #5a6268;
+.maze-question {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.error-msg {
+    color: red;
+    font-weight: bold;
+}
+
+.hint {
+    color: gray;
+    font-size: 14px;
+    margin-top: 10px;
 }

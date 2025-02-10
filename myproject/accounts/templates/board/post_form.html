@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if is_edit %}게시글 수정{% else %}새 글 작성{% endif %}</title>
-</head>
-<body>
-    <h2>{% if is_edit %}게시글 수정{% else %}새 글 작성{% endif %}</h2>
-    <form method="post">
+{% extends "base.html" %}
+{% block title %}{{ is_edit|yesno:"게시글 수정,게시글 작성" }}{% endblock %}
+
+{% block content %}
+    <h2>{{ is_edit|yesno:"게시글 수정,게시글 작성" }}</h2>
+    
+    <form method="post" enctype="multipart/form-data">  <!-- 파일 업로드 가능하도록 추가 -->
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">{% if is_edit%}수정 완료{% else%}등록{% endif %}</button>
+        <button type="submit">저장</button>
+        <a href="{% url 'post_list' %}"><button type="button">취소</button></a>
     </form>
-    <a href="{% url 'post_list' %}">목록으로</a>
-</body>
-</html>
+{% endblock %}

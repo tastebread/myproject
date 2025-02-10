@@ -8,7 +8,6 @@ from .views import profile_view,profile_edit
 
 from .views import signup,profile
 from accounts.views import home
-
 urlpatterns = [
     path('signup/', signup,name='signup'), #회원가입 페이지
     path('', home, name='home'),

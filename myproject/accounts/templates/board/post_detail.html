@@ -2,90 +2,143 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-    <h2>{{ post.title }}</h2>
-    <p>작성자: {{ post.author }}</p>
-    <p>작성일: {{ post.created_at }}</p>
-    <hr>
-    {% if post.image%}
-        <img src="{{ post.image.url }}" alt="게시글 이미지" style="max-width: 100%; border-radius: 10px;">
-    {% endif %}
-    <p>{{ post.content }}</p>
+<div class="post-container">
+    <div class="post-card">
+        <h2>{{ post.title }}</h2>
+        <p class="post-meta">
+            작성자: <strong>{{ post.author }}</strong> | 작성일: {{ post.created_at|date:"Y-m-d H:i" }}
+        </p>
 
-    <!-- 좋아요 버튼 추카-->
-     <div>
-        <button id="like-btn" data-post-id="{{ post.id}}">
-            {% if user in post.likes.all %}
-                ❤️ 좋아요 취소
-            {% else %}
-                🤍 좋아요
-            {% endif %}
-        </button>
-        <span id="like-count">{{ post.likes.count }}</span>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="게시글 이미지" class="post-image">
+        {% else %}
+            <p>이미지가 없습니다.</p>
+        {% endif %}
+
+        <p class="post-content">{{ post.content }}</p>
+
+        <!-- 첨부파일 다운로드 버튼 -->
+        {% if post.attached_file %}
+            <p class="attached-file">
+                📎 <strong>첨부 파일:</strong> 
+                <a href="{{ post.attached_file.url }}" download class="btn-download">
+                    {{ post.attached_file.name }}
+                </a>
+            </p>
+        {% endif %}
+
+        <!-- 좋아요 & 북마크 버튼 -->
+        <div class="post-actions">
+            <form action="{% url 'toggle_bookmark' post.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn {% if user in post.bookmarks.all %}btn-danger{% else %}btn-primary{% endif %}">
+                    {% if user in post.bookmarks.all %}📌 북마크 취소{% else %}📌 북마크 추가{% endif %}
+                </button>
+            </form>
+
+            <button id="like-btn" data-post-id="{{ post.id }}" class="btn btn-like">
+                {% if user in post.likes.all %}❤️ 좋아요 취소{% else %}🤍 좋아요{% endif %}
+            </button>
+            <span id="like-count">{{ post.likes.count }}</span>
+        </div>
+
+        <!-- 수정 & 삭제 버튼 (작성자만 보이게) -->
+        {% if user == post.author %}
+        <div class="post-manage">
+            <a href="{% url 'post_edit' post.id %}" class="btn-edit">수정</a>
+            <a href="{% url 'post_delete' post.id %}" class="btn-delete">삭제</a>
+        </div>
+        {% endif %}
     </div>
 
-    {% if user == post.author %}
-        <div class="post-actions">
-            <a href="{% url 'post_edit' post.id %}" class="edit-btn">수정</a>
-            <a href="{% url 'post_delete' post.id %}" class="delete-btn">삭제</a>
+    <!-- 🔹 추천 게시글 섹션 추가 -->
+    <div class="related-posts">
+        <h3>📢 추천 게시글</h3>
+        <div class="post-grid">
+            {% for related in related_posts %}
+                <div class="post-card">
+                    {% if related.image %}
+                        <img src="{{ related.image.url }}" alt="추천 게시글 이미지" class="post-image">
+                    {% endif %}
+                    <div class="post-content">
+                        <h4><a href="{% url 'post_detail' related.id %}">{{ related.title }}</a></h4>
+                        <p class="post-meta">작성자: {{ related.author }} | 조회수: {{ related.views }}</p>
+                        <div class="post-tags">
+                            {% for tag in related.tags.all %}
+                                <a href="{% url 'post_list' %}>tag={{ tag.name }}" class="tag">{{ tag.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>추천할 게시글이 없습니다.</p>
+            {% endfor %}
         </div>
-    {% endif %}
-    
-    <h3>댓글</h3>
-    {% for comment in post.comments.all %}
-        <div class="comment-box">
-            <strong>{{ comment.author }}</strong>: {{ comment.content }}
-            <div class="comment-actions">
-                <small>{{ comment.created_at }}</small>
-                {% if user == comment.author %}
-                     <a href="{% url 'comment_edit' comment.id %}" class="edit-btn">수정</a>
-                     <a href="{% url 'comment_delete' comment.id %}" class="delete-btn">삭제</a>
-                {% endif %}
-            </div>
-        </div>
-    {% endfor %}
-    
-    {% if user.is_authenticated %}
+    </div>
+
+    <!-- 댓글 섹션 -->
+    <div class="comments-section">
+        <h3>💬 댓글</h3>
+
+        {% if post.comments.all %}
+            {% for comment in post.comments.all %}
+                <div class="comment-box">
+                    <p><strong>{{ comment.author }}</strong>: {{ comment.content }}</p>
+                    <small>{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+
+                    {% if user == comment.author %}
+                    <div class="comment-actions">
+                        <a href="{% url 'comment_edit' comment.id %}" class="btn-edit">수정</a>
+                        <a href="{% url 'comment_delete' comment.id %}" class="btn-delete">삭제</a>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>아직 댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+        {% endif %}
+
+        <!-- 댓글 입력 폼 -->
+        {% if user.is_authenticated %}
         <div class="comment-form">
             <form method="post" action="{% url 'add_comment' post.id %}">
                 {% csrf_token %}
                 {{ comment_form.as_p }}
-                <button type="submit">댓글 작성</button>
+                <button type="submit" class="btn btn-primary">댓글 작성</button>
             </form>
         </div>
-    {% else %}
+        {% else %}
         <p><a href="{% url 'login' %}">로그인</a> 후 댓글을 작성할 수 있습니다.</p>
-    {% endif %}
+        {% endif %}
+    </div>
 
-    <a href="{% url 'post_list' %}"><button>목록으로</button></a>
+    <a href="{% url 'post_list' %}" class="btn btn-secondary">목록으로</a>
+</div>
 
-    <!-- 좋아요 기능을 위한 JavaScript -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const likeBtn = document.getElementById("like-btn");
-            const likeCount = document.getElementById("like-count");
-            
-            likeBtn.addEventListener("click", function() {
-                const postId = likeBtn.getAttribute("data-post-id");
-                
-                fetch(`/board/post/${postId}/like/`, {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": "{{ csrf_token }}",
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "same-origin"
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.liked) {
-                        likeBtn.innerHTML = "❤️ 좋아요 취소";
-                    } else {
-                        likeBtn.innerHTML = "🤍 좋아요";
-                    }
-                    likeCount.textContent = data.total_likes;
-                })
-                .catch(error => console.error("Error:", error));
-            });
+<!-- 좋아요 기능 JavaScript -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const likeBtn = document.getElementById("like-btn");
+        const likeCount = document.getElementById("like-count");
+
+        likeBtn.addEventListener("click", function() {
+            const postId = likeBtn.getAttribute("data-post-id");
+
+            fetch(`/board/post/${postId}/like/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json"
+                },
+                credentials: "same-origin"
+            })
+            .then(response => response.json())
+            .then(data => {
+                likeBtn.innerHTML = data.liked ? "❤️ 좋아요 취소" : "🤍 좋아요";
+                likeCount.textContent = data.total_likes;
+            })
+            .catch(error => console.error("Error:", error));
         });
-    </script>
+    });
+</script>
 {% endblock %}

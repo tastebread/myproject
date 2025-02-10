@@ -5,6 +5,7 @@ from .forms import PostForm
 from .forms import CommentForm
 from django.db.models import Q, Count # 여러 필드 검색, 댓글 개수 계산할 때 사용
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 # Create your views here.
 
 #글 목록
@@ -47,6 +48,19 @@ def post_list(request):
         posts = posts.order_by('created_at')  # 오래된순
     elif sort_option == 'views':
         posts = posts.order_by('-views')  # 조회수 순
+    
+    # 페이지네이션 적용 (10개씩 표시)
+    paginator = Paginator(posts, 10)  # 한 페이지에 10개 게시글 표시
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'board/post_list.html', {
+        'page_obj': page_obj,  # 템플릿에서 사용 가능하도록 전달
+        'categories': Category.objects.all(),
+        'query': query,
+        'tag_name': tag_name,
+        'sort_option': sort_option
+    })
 
     return render(request, 'board/post_list.html', {'posts': posts, 'categories': categories, 'query': query,'tag_name': tag_name, 'sort_option': sort_option})
 
@@ -56,24 +70,40 @@ def post_detail(request, post_id):
     #조회수 증가 로직 추가
     post.views += 1
     post.save()
+    
     comment_form = CommentForm() #댓글폼 추가
-    return render(request, 'board/post_detail.html', {'post': post, 'comment_form': comment_form})
+    is_bookmarked = post.bookmarks.filter(id=request.user.id).exists() if request.user.is_authenticated else False
+    
+    related_posts = post.related_posts()
+
+    return render(request, 'board/post_detail.html', {
+        'post': post, 
+        'comment_form': comment_form,
+        'is_bookmarked': is_bookmarked,
+        'related_posts': related_posts  #  템플릿에 추천 게시글 전달
+    })
 
 #글 작성 (아이디로그인후 가능)
 @login_required
 def post_create(request):
     if request.method == 'POST':
-        print("FILES", request.FILES)
+        print("📌 DEBUG: request.FILES ->", request.FILES)
         form = PostForm(request.POST,request.FILES)
+        
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user #현재 로그인한 사용자를 작성자로 설정
 
             if 'image' in request.FILES: #이미지 파일이 있는 경우만 저장!
+                print(" DEBUG: 이미지 업로드 감지됨")
                 post.image = request.FILES['image']
+            else:
+                print(" DEBUG: 이미지 파일이 없습니다.")
+            
             post.save()
-            print("Uploaded file path:", post.image.url)
             return redirect('post_detail', post_id=post.id) # 글 목록으로 이동
+        else:
+            print(" DEBUG: 폼 오류 발생 ->", form.errors)  # 폼 에러 확인
     else:
         form = PostForm()
     
@@ -176,3 +206,21 @@ def post_like(request, post_id):
         liked = True
     
     return JsonResponse({'liked': liked, 'total_likes': post.likes.count()})
+
+@login_required
+def bookmarked_posts(request):
+    posts = request.user.bookmarked_posts.all()  # 🔹 현재 로그인한 사용자가 북마크한 게시글 가져오기
+    return render(request, 'board/bookmarked_posts.html', {'posts': posts})
+
+@login_required
+def toggle_bookmark(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    
+    # 북마크 추가/삭제 토글
+    if post.bookmarks.filter(id=request.user.id).exists():
+        post.bookmarks.remove(request.user)  # 북마크 삭제
+    else:
+        post.bookmarks.add(request.user)  # 북마크 추가
+    
+    return redirect('post_detail', post_id=post.id)
+

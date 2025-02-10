@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import post_list, post_detail, post_create, add_comment, comment_edit,comment_delete
-from .views import post_edit,post_delete,post_like
+from .views import post_edit,post_delete,post_like,toggle_bookmark,bookmarked_posts
 urlpatterns = [
     path('', post_list, name='post_list'), #글 목록
     path('<int:post_id>/', post_detail, name='post_detail'), #글 상세 조회
@@ -11,6 +11,8 @@ urlpatterns = [
     path('comment/<int:comment_id>/edit/', comment_edit,name='comment_edit'), #댓글 수정 URL 추가
     path('comment/<int:comment_id>/delete/', comment_delete, name='comment_delete'), #댓글 삭제 URL
     path('post/<int:post_id>/like', post_like, name='post_like'), #좋아요 기능
+    path('post/<int:post_id>/bookmark/', toggle_bookmark, name='toggle_bookmark'),
+    path('bookmarks/', bookmarked_posts, name='bookmarked_posts'),
 
 ]
 
