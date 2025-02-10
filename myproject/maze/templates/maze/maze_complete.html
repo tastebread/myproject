@@ -1,0 +1,8 @@
+{% extends "maze/base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>🎉 축하합니다! 미궁을 클리어했습니다! 🎉</h2>
+    <a href="{% url 'start_maze_game' %}" class="btn">다시 시작</a>
+</div>
+{% endblock %}

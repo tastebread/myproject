@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}미궁 문제{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>🔍 {{ question.question_text }}</h2>
+    
+    <form method="post" action="{% url 'submit_answer' %}">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        
+        <input type="text" name="answer" placeholder="정답 입력" required>
+        <button type="submit" class="btn-primary">제출</button>
+    </form>
+
+    {% if question.hint %}
+    <p class="hint">💡 힌트: {{ question.hint }}</p>
+    {% endif %}
+</div>
+{% endblock %}
