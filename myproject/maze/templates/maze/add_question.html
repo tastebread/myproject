@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}미궁 문제 추가{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>미궁 문제 추가</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn-primary">문제 추가</button>
+    </form>
+    
+    <a href="{% url 'maze_question' %}" class="btn-secondary">문제 풀러 가기</a>
+</div>
+{% endblock %}

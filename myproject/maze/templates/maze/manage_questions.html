@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}미궁 문제 관리{% endblock %}
+
+{% block content %}
+<h2>미궁 문제 관리</h2>
+<a href="{% url 'add_maze_question' %}" class="btn btn-primary">문제 추가</a>
+<ul class="post-list">
+    {% for question in questions %}
+    <li>
+        <strong>{{ question.order }}.</strong> {{ question.question_text }} ({{ question.level }})
+        <a href="{% url 'edit_maze_question' question.id %}" class="btn btn-edit">수정</a>
+        <a href="{% url 'delete_maze_question' question.id %}" class="btn btn-delete">삭제</a>
+    </li>
+    {% empty %}
+    <p>등록된 문제가 없습니다.</p>
+    {% endfor %}
+</ul>
+{% endblock %}

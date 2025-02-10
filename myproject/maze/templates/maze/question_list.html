@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}미궁 문제 목록{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>미궁 문제 목록</h2>
+    <a href="{% url 'add_maze_question' %}" class="btn-primary">새 문제 추가</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>문제</th>
+                <th>난이도</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question.order }}</td>
+                <td>{{ question.question_text }}</td>
+                <td>{{ question.get_level_display }}</td>
+                <td><a href="{% url 'edit_maze_question' question.id %}" class="btn-edit">수정</a></td>
+                <td><a href="{% url 'delete_maze_question' question.id %}" class="btn-delete">삭제</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">등록된 문제가 없습니다.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
