@@ -1,0 +1,5 @@
+Django
+gunicorn
+psycopg2-binary  # PostgreSQL 데이터베이스 사용 시 필요
+whitenoise  # 정적 파일 서빙
+dj-database-url  # 환경 변수로 DB 설정 가능
