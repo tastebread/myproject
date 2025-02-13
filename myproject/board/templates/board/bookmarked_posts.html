@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}내 북마크{% endblock %}
+
+{% block content %}
+    <h2>내가 북마크한 게시글</h2>
+    
+    <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>  
+                - {{ post.author }} ({{ post.created_at|date:"Y-m-d H:i" }})
+            </li>
+        {% empty %}
+            <p>북마크한 게시글이 없습니다.</p>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'post_list' %}"><button>게시판으로</button></a>
+{% endblock %}

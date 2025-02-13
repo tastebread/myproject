@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}난이도 선택{% endblock %}
+
+{% block content %}
+<h2 class="text-center">난이도를 선택하세요</h2>
+
+<!-- 난이도 선택 폼 -->
+<form method="POST" action="{% url 'select_difficulty' %}" class="difficulty-form" novalidate>
+    {% csrf_token %}
+
+    <div class="form-group text-center">
+        <label for="difficulty_easy" class="difficulty-label">
+            <input type="radio" id="difficulty_easy" name="difficulty" value="easy" checked> 쉬움
+        </label><br>
+        
+        <label for="difficulty_medium" class="difficulty-label">
+            <input type="radio" id="difficulty_medium" name="difficulty" value="medium"> 보통
+        </label><br>
+        
+        <label for="difficulty_hard" class="difficulty-label">
+            <input type="radio" id="difficulty_hard" name="difficulty" value="hard"> 어려움
+        </label><br>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">선택</button>
+</form>
+{% endblock %}

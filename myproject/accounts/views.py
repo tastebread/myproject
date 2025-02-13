@@ -28,11 +28,18 @@ def signup(request):
 
 @login_required #로그인한 사용자만 접근 가능
 def profile(request):
-    return render(request,'accounts/profile.html')
+    profile = get_object_or_404(Profile, user=request.user) #현재 로그인한 유저의 프로필
+    posts = Post.objects.filter(author=request.user).order_by('-created_at') # 내가 작성한 글 가져오기, 최신 순 정렬
+    comments = Comment.objects.filter(author=request.user).order_by('-created_at') # 내가 작성한 댓글 가져오기 
+    return render(request,"accounts/profile.html",{
+        "profile": profile,
+        "posts": posts,
+        "comments": comments,
+    })
 
 @login_required
 def profile_view(request, username):
-    user = User.objects.get(username=username)  # 유저가 있는지 확인
+    user = get_object_or_404(User, username=username) # 유저가 있는지 확인
 
     profile, created = Profile.objects.get_or_create(user=user)  # 프로필이 없으면 자동 생성
     
@@ -40,7 +47,7 @@ def profile_view(request, username):
     posts = Post.objects.filter(author=user).order_by('-created_at') #최신순 정렬
     comments = Comment.objects.filter(author=user).order_by('-created_at') # 최신순 정렬
     
-    return render(request, 'accounts/profile.html', {'profile': profile, 'user': user})
+    return render(request, 'accounts/profile.html', {'profile': profile, 'user': user, 'posts': posts, 'comments':comments})
 
 @login_required
 def profile_edit(request):
@@ -50,7 +57,7 @@ def profile_edit(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('profile', username=request.user.username)  #  URL 패턴에 맞게 수정
+            return redirect('profile_detail', username=request.user.username)  #  URL 패턴에 맞게 수정
     else:
         form = ProfileForm(instance=profile)
 

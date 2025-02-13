@@ -8,11 +8,11 @@ urlpatterns = [
     path('<int:post_id>/edit/', post_edit, name='post_edit'), #게시글 수정
     path('<int:post_id>/delete/', post_delete, name='post_delete'),
     path('<int:post_id>/comment/', add_comment, name='add_comment'), #댓글 url
-    path('comment/<int:comment_id>/edit/', comment_edit,name='comment_edit'), #댓글 수정 URL 추가
+    path('comment/<int:comment_id>/edit/', comment_edit, name='comment_edit'), #댓글 수정 URL 추가
     path('comment/<int:comment_id>/delete/', comment_delete, name='comment_delete'), #댓글 삭제 URL
-    path('post/<int:post_id>/like', post_like, name='post_like'), #좋아요 기능
+    path('post/<int:post_id>/like/', post_like, name='post_like'), #좋아요 기능
     path('post/<int:post_id>/bookmark/', toggle_bookmark, name='toggle_bookmark'),
-    path('bookmarks/', bookmarked_posts, name='bookmarked_posts'),
+    path('post/bookmarks/', bookmarked_posts, name='bookmarked_posts'),
 
 ]
 

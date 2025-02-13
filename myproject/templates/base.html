@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Django 사이트{% endblock %}</title>
+
+    {% load static %} <!-- django에서 정적 파일 사용 선언-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"> <!--css파일 연결-->
+</head>
+<body>
+    <div class="container">
+        <h1>빵가게</h1>
+        <nav>
+            <a href="{% url 'post_list' %}">게시판</a> |
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">프로필</a> |
+                <!-- 로그아웃 버튼을 POST 방식으로 변경-->
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">로그아웃</button>
+                </form> |
+                <a href="{% url 'select_difficulty' %}" class = "maze-btn"> 미궁 게임 시작</a>
+            {% else %}
+                <a href="{% url 'login' %}">로그인</a> |
+                <a href="{% url 'signup' %}">회원가입</a>
+            {% endif %}
+        </nav>
+        <hr>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

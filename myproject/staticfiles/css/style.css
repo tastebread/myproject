@@ -394,3 +394,17 @@ input[type="text"] {
     font-size: 14px;
     margin-top: 10px;
 }
+
+/*maze 버튼 */
+.maze-btn {
+    background-color: #ff5722; /* 주황색 */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.maze-btn:hover {
+    background-color: #e64a19; /* hover 시 색상 변경 */
+}

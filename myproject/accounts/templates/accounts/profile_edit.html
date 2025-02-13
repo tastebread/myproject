@@ -10,5 +10,5 @@
     </form>
     
     <!-- 취소 버튼 수정 -->
-    <a href="{% url 'profile' username=request.user.username %}" class="btn btn-secondary">취소</a>
+    <a href="{% url 'profile_detail' username=request.user.username %}" class="btn btn-secondary">취소</a>
 {% endblock %}

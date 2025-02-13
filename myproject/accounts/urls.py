@@ -4,15 +4,14 @@ from django.contrib.auth.views import (
     PasswordResetView,PasswordResetDoneView,
     PasswordResetConfirmView,PasswordResetCompleteView
 )
-from .views import profile_view,profile_edit
-
-from .views import signup,profile
+from .views import signup,profile,profile_view,profile_edit
 from accounts.views import home
+
 urlpatterns = [
     path('signup/', signup,name='signup'), #회원가입 페이지
     path('', home, name='home'),
     path('login/', LoginView.as_view(template_name='accounts/login.html'),name='login'),
-    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='/accounts/login/'), name='logout'),
     path('profile/', profile, name='profile'), #프로필 페이지 추가
     path('password_change/', PasswordChangeView.as_view(template_name='accounts/password_change.html'), name='password_change'),
     path('password_change_done/', PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'),name='password_change_done'),
@@ -27,6 +26,6 @@ urlpatterns = [
     #프로필 수정 페이지
     path('profile/edit/', profile_edit, name='profile_edit'), 
     #특정 유저의 프로필
-    path('profile/<str:username>/', profile_view, name='profile'),
+    path('profile/<str:username>/', profile_view, name='profile_detail'),
 
 ]

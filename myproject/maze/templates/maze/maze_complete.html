@@ -1,8 +1,19 @@
-{% extends "maze/base.html" %}
-
 {% block content %}
-<div class="card">
-    <h2>🎉 축하합니다! 미궁을 클리어했습니다! 🎉</h2>
-    <a href="{% url 'start_maze_game' %}" class="btn">다시 시작</a>
+<div class="card text-center">
+    <h2 class="text-center">🎉 축하합니다! 미궁을 클리어했습니다! 🎉</h2>
+    <p class="text-muted mb-3">당신의 도전이 끝났습니다. 새로운 미궁에 도전해보세요!</p>
+    <a href="{% url 'start_maze' %}" class="btn btn-primary mt-3"> 다시 시작</a>
 </div>
+
+<style>
+    .card {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+    .btn-primary {
+        font-size: 1.2rem;
+        padding: 10px 20px;
+    }
+</style>
 {% endblock %}

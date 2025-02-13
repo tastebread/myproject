@@ -1,12 +1,14 @@
 from django.db import models
-
-# Create your models here.
+import uuid
+import os
 
 from django.contrib.auth.models import User
 
 def post_file_path(instance, filename):
-    """업로드된 파일을 저장할 경로 설정"""
-    return f'uploads/posts/{instance.author.username}/{filename}'
+    """업로드된 파일을 저장할 경로 설정(UUID를 사용하여 중복 방지)"""
+    ext = filename.split('.')[-1] # 확장자 가져오기
+    new_filename = f"{uuid.uuid4()}.{ext}" # UUID로 새로운 파일명 생성
+    return os.path.join('uploads/posts', instance.author.username, new_filename)
 
 #카테고리 모델
 class Category(models.Model):
@@ -29,7 +31,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) #작성 시간
     updated_at = models.DateTimeField(auto_now=True) # 수정 시간
     image = models.ImageField(upload_to='post_images/', blank=True, null=True) #이미지 필드 추가
-    views = models.IntegerField(default=0) #조회수 필드 추가
+    views = models.PositiveIntegerField(default=0) #조회수 필드 추가
     tags = models.ManyToManyField(Tag, blank=True) # 태그 (다대다 관계)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts') # 카테고리 추가
 
@@ -43,11 +45,15 @@ class Post(models.Model):
 
     def related_posts(self):
         """ 태그가 겹치는 게시글 추천 """
-        return Post.objects.filter(tags__in=self.tags.all()).exclude(id=self.id).distinct()[:5]
+        tag_ids = self.tags.values_list('id', flat=True)
+        return Post.objects.filter(tags__in=tag_ids).exclude(id=self.id).distinct().select_related('author','category')[:5]
     
-    def popular_posts():
+    @classmethod
+    def popular_posts(cls):
         """ 조회수 & 좋아요 수 기반 인기 게시글 추천 """
-        return Post.objects.annotate(score=models.Count('likes') + models.F('views')).order_by('-score')[:5]
+        return cls.objects.annotate(
+            score=models.Count('likes', distinct=True) + models.F('views')
+        ).order_by('-score')[:5]
     
     def __str__(self):
         return self.title
@@ -59,7 +65,9 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user','post') #같은 유저가 같은 게시글을 여러 번 좋아요 못하도록 설정
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'post'], name='unique_user_post_like')
+        ]
 class Comment(models.Model):
     #어떤 게시글(post)에 달린 댓글인지 연결
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments') # 댓글이 속한 게시글
@@ -72,4 +80,5 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True) # 수정시간
 
     def __str__(self):
-        return f"{self.author}: {self.content[:20]}"
+        content_preview = (self.content[:20] + "...") if len(self.content) > 20 else self.content
+        return f"{self.author}: {content_preview}"

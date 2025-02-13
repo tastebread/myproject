@@ -9,5 +9,7 @@ def create_user_profile(sender, instance,created, **kwargs):
         Profile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwags):
-    instance.profile.save()
+def save_user_profile(sender, instance, **kwargs):
+    # Profile 객체가 있는지 확인 후 저장 (에러 방지를 위한 조건 추가)
+    if hasattr(instance, 'profile'):
+        instance.profile.save()

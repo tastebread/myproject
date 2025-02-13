@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회원가입</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}회원가입{% endblock %}
+
+{% block content %}
+<div class="container">
     <h2>회원가입</h2>
-    <form method="post", enctype="multipart/form-data"> <!--이미지 업로드를 위해 entype 추가-->
-        {% csrf_token %} <!--보안 토큰 추카-->
-        {{ form.as_p}} <!--Django 폼을 자동으로 HTML로 렌더링-->
-        <button type="submit">가입하기</button>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">가입하기</button>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}

@@ -6,20 +6,17 @@ from .forms import CommentForm
 from django.db.models import Q, Count # 여러 필드 검색, 댓글 개수 계산할 때 사용
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-# Create your views here.
+from django.contrib import messages
+from django.views.decorators.http import require_POST
 
 #글 목록
 def post_list(request):
     query = request.GET.get('q')  # 검색어 가져오기
     tag_name = request.GET.get('tag') # 특정 태그로 필터링
-    category_name = request.GET.get('category') # 카테고리 피ㄹ터링
+    category_name = request.GET.get('category') # 카테고리 필터링
     sort_option = request.GET.get('sort', 'latest')  # 정렬 옵션 가져오기 (기본값: 최신순)
 
     posts = Post.objects.all()  # 모든 게시글 가져오기
-
-
-    if query:
-        posts = posts.filter(title__icontains=query) # 제목 검색
     
     if tag_name:
         tag = get_object_or_404(Tag, name=tag_name) # 태그 확인
@@ -37,9 +34,6 @@ def post_list(request):
             Q(content__icontains=query) | # 내용에 검색어 포함
             Q(author__username__icontains=query) # 작성자 이름에 검색어 포함
         )
-
-    if query:
-        posts = posts.filter(title__icontains=query)  # 제목에서 검색
 
     # 정렬 기능 추가
     if sort_option == 'latest':
@@ -62,7 +56,7 @@ def post_list(request):
         'sort_option': sort_option
     })
 
-    return render(request, 'board/post_list.html', {'posts': posts, 'categories': categories, 'query': query,'tag_name': tag_name, 'sort_option': sort_option})
+    #return render(request, 'board/post_list.html', {'posts': posts, 'categories': categories, 'query': query,'tag_name': tag_name, 'sort_option': sort_option})
 
 #글 상세 조회
 def post_detail(request, post_id):
@@ -72,12 +66,14 @@ def post_detail(request, post_id):
     post.save()
     
     comment_form = CommentForm() #댓글폼 추가
-    is_bookmarked = post.bookmarks.filter(id=request.user.id).exists() if request.user.is_authenticated else False
+    is_bookmarked = False
+    if request.user.is_authenticated:
+        is_bookmarked = post.bookmarks.filter(id=request.user.id).exists()
     
     related_posts = post.related_posts()
 
     return render(request, 'board/post_detail.html', {
-        'post': post, 
+        'post': post,
         'comment_form': comment_form,
         'is_bookmarked': is_bookmarked,
         'related_posts': related_posts  #  템플릿에 추천 게시글 전달
@@ -87,7 +83,6 @@ def post_detail(request, post_id):
 @login_required
 def post_create(request):
     if request.method == 'POST':
-        print("📌 DEBUG: request.FILES ->", request.FILES)
         form = PostForm(request.POST,request.FILES)
         
         if form.is_valid():
@@ -129,11 +124,13 @@ def post_edit(request, post_id):
 
 #게시글 삭제
 @login_required
+@require_POST
 def post_delete(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
     #작성자만 삭제 가능하도록 제한
     if post.author != request.user:
+        message.error(request, "삭제 권한이 없습니다.")
         return redirect('post_list')
     
     if request.method == 'POST': # 삭제 확인 후 실행
@@ -183,6 +180,7 @@ def comment_delete(request, comment_id):
 
     #댓글 작성자만 삭제 가능
     if comment.author != request.user:
+        messages.error(request, "삭제 권한이 없습니다.")
         return redirect('post_detail', post_id=comment.post.id)
     
     if request.method == 'POST': #삭제 확인 후 실행
@@ -196,14 +194,11 @@ def post_like(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     user = request.user
 
-    if post.likes.filter(id=user.id).exists():
-        #이미 좋아요를 눌렀다면 취소
-        post.likes.remove(user)
-        liked = False
-    else:
-        #좋아요 추가
+    liked = not post.likes.filter(id=user.id).exists()
+    if liked:
         post.likes.add(user)
-        liked = True
+    else:
+        post.likes.remove(user)
     
     return JsonResponse({'liked': liked, 'total_likes': post.likes.count()})
 

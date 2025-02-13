@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-5ql)&+*-yd(vs-br72(#-6mw%bf0boab)nivpv)y%tmc2$m7i%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accounts', #accounts 앱 추가
     'board', #게시판 CRUD 앱 추가
     'maze', #미궁 게임 앱 추가
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,6 +124,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static') #프로젝트 내 static 폴더 설정
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #정적 파일 모으는 경로
+#STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -131,7 +133,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/accounts/login' #django 기본 로그인 URL 설정
 LOGIN_REDIRECT_URL = '/accounts/profile/' #로그인 후 이동할 페이지
-LOGOUT_REDIRECT_URL = '/' #로그아웃 후 이동할 페이지
+LOGOUT_REDIRECT_URL = "/accounts/login/" #로그아웃 후 이동할 페이지
 PASSWORD_CHANGE_REDIRECT_URL = '/profile/' # 비밀번호 변경 후 이동할 페이지
 
 #이메일 설정 (테스트용- 콘솔 출력))
@@ -150,3 +152,7 @@ EMAIL_HOST_PASSWORD ='your-email-password'
 #미디어 파일 설정
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#MEDIA_ROOT = BASE_DIR / "media"
+
+#서버배포
+#CSRF_TRUSTED_ORIGINS = ["http://*"]

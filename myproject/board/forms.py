@@ -4,11 +4,16 @@ from .models import Comment
 
 class PostForm(forms.ModelForm):
     category = forms.ModelChoiceField(
-        queryset=Category.objects.all(),
+        queryset=Category.objects.none(), #초기값 설정
         required=False,
         empty_label="카테고리 선택"
     )
-    tags = forms.CharField(required=False, help_text="쉼표(,)로 구분해서 태그를 입력하세요.")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.all() # 동적으로 할당
+    
+    tags = forms.CharField(required=False, help_text="쉼표(,)로 구분해서 태그를 입력하세요.", strip=True)
     class Meta:
         model = Post
         fields = ['title','content','image','tags','category']
@@ -22,20 +27,24 @@ class PostForm(forms.ModelForm):
     
     def save(self, commit=True):
         post = super().save(commit=False)
-        tag_names = self.cleaned_data['tags'].split(',')  # 쉼표로 태그 분리
+        tag_names = {name.strip() for name in self.cleaned_data['tags'].split(',') if name.strip()}  # 중복 제거
+
+        existing_tags = Tag.objects.filter(name__in=tag_names)
+        existing_tag_names = set(existing_tags.values_list('name', flat=True))
+        
         tag_list = []
 
-        for name in tag_names:
-            name = name.strip()  # 공백 제거
-            if name:
-                tag, created = Tag.objects.get_or_create(name=name)  # 중복 방지
-                tag_list.append(tag)
+        new_tags = [Tag(name=name) for name in tag_names if name not in existing_tag_names]
+        Tag.objects.bulk_create(new_tags)  # 새 태그 한 번에 추가
+
+        all_tags = list(existing_tags) + new_tags  # 기존 + 새 태그 결합
 
         if commit:
             post.save()
-            post.tags.set(tag_list)  # ManyToMany 관계 설정
+            post.tags.set(all_tags)  # ManyToMany 관계 설정
         return post
 class CommentForm(forms.ModelForm):
+    content = forms.CharField(widget=forms.Textarea, strip=True)  # 공백 자동 제거
     class Meta:
         model = Comment
         fields = ['content']

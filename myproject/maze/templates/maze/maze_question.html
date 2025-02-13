@@ -12,74 +12,76 @@
     <!-- 제한 시간 표시 -->
     <p><strong>제한 시간:</strong> <span id="timer">{{ question.time_limit }}</span>초</p>
 
-    <form id="answer-form">
+    <form id="answer-form" method="POST" action="{% url 'submit_answer' %}">
         {% csrf_token %}
-        <input type="text" name="answer" placeholder="정답 입력">
-        <button type="submit" class="btn-primary">제출</button>
+        <input type="text" name="answer" placeholder="정답 입력" required maxlength="100">
+        <button type="submit" class="btn btn-primary">제출</button>
     </form>
 
-    <button id="hint-btn" class="btn-secondary">🔍 힌트 보기</button>
+    <button id="hint-btn" class="btn btn-secondary">🔍 힌트 보기</button>
     <p id="hint-text"></p>
     
     <p id="feedback"></p>
 </div>
 
 <script>
+    document.getElementById("answer-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // 기본 제출 방지
+        
+        let formData = new FormData(this);
+
+        fetch(this.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("feedback").innerHTML = data.message;
+            document.getElementById("current-score").textContent = data.score;
+
+            if (data.correct) {
+                setTimeout (() => {
+                    window.location.href = data.next_question_url; //다음 문제로 이동
+                }, 1000);
+            }
+        })
+        .catch(error => console.error("정답 제출 오류:", error));
+    });
+
+    document.getElementById("hint-btn").addEventListener("click", function() {
+        this.disabled = true;
+        fetch("{% url 'get_hint' %}")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("hint-text").innerHTML = "💡 힌트: " + data.hint;
+        })
+        .catch(error => console.error("힌트 불러오기 오류:", error));
+    });
+
     let timeRemaining = {{ question.time_limit }};
     const timerElement = document.getElementById("timer");
-    const scoreElement = document.getElementById("current-score");
-    const hintBtn = document.getElementById("hint-btn");
-    const hintText = document.getElementById("hint-text");
+
+    if (timeRemaining > 0) {
+        const timerInterval = setInterval(updateTimer, 1000);
+    }
 
     function updateTimer() {
         if (timeRemaining > 0) {
             timeRemaining--;
             timerElement.textContent = timeRemaining;
         } else {
-            document.getElementById("feedback").innerHTML = "⏳ 제한 시간이 초과되었습니다!";
-            document.getElementById("answer-form").style.display = "none";
+            clearInterval(timerInterval);
+            document.getElementById("feedback").innerHTML = "⏳ 제한 시간이 초과되었습니다! 자동 제출합니다.";
+
+            const answerInput = document.querySelector("input[name='answer']");
+            if (answerInput.value.trim().length === 0) {
+                answerInput.value = "시간 초과";
+            }
+            document.getElementById("answer-form").submit();
         }
     }
-
-    setInterval(updateTimer, 1000);
-
-    document.getElementById("answer-form").addEventListener("submit", function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-
-        fetch("{% url 'submit_answer' %}", {
-            method: "POST",
-            body: formData,
-            headers: {"X-CSRFToken": "{{ csrf_token }}"}
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("서버 응답:", data) // 서버 응답 로그
-            if (data.correct) {
-                document.getElementById("feedback").innerHTML = "✅ 정답입니다! 다음 문제로 이동합니다.";
-
-                if (data.next_question_url) {
-                    console.log("✅ 다음 문제 URL:", data.next_question_url); // ✅ 이동 URL 확인
-                    setTimeout(() => {
-                        window.location.href = data.next_question_url;
-                    }, 1000);  
-                } else {
-                    console.log("❌ next_question_url 없음!");
-                }
-            } else {
-                document.getElementById("feedback").innerHTML = data.message;
-                document.getElementById("current-score").textContent = data.score;
-            }
-        })
-        .catch(error => console.error("오류 발생:", error));
-    });
-
-    document.getElementById("hint-btn").addEventListener("click", function() {
-        fetch("{% url 'get_hint' %}")
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("hint-text").innerHTML = "💡 힌트: " + data.hint;
-        });
-    });
 </script>
 {% endblock %}

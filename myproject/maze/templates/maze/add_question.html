@@ -2,16 +2,57 @@
 {% block title %}미궁 문제 추가{% endblock %}
 
 {% block content %}
-<div class="card">
+<div class="card text-center">
     <h2>미궁 문제 추가</h2>
     
-    <form method="post">
+    <form method="post" action="{% url 'add_maze_question' %}" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
 
-        <button type="submit" class="btn-primary">문제 추가</button>
+        <div class="form-group">
+            {{ form.question_text.label_tag }}
+            {{ form.question_text }}
+        </div>
+
+        <div class="form-group">
+            {{ form.answer.label_tag }}
+            {{ form.answer }}
+        </div>
+
+        <div class="form-group">
+            {{ form.level.label_tag }}
+            {{ form.level }}
+        </div>
+
+        <div class="form-group">
+            {{ form.time_limit.label_tag }}
+            {{ form.time_limit }}
+        </div>
+
+        <div class="form-group">
+            {{ form.hint.label_tag }}
+            {{ form.hint }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">➕ 문제 추가</button>
     </form>
     
-    <a href="{% url 'maze_question' %}" class="btn-secondary">문제 풀러 가기</a>
+    <a href="{% url 'maze_question' %}" class="btn btn-secondary">🎯 문제 풀러 가기</a>
 </div>
+
+<style>
+    .card {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+</style>
 {% endblock %}
