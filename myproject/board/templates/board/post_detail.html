@@ -46,7 +46,10 @@
         {% if user == post.author %}
         <div class="post-manage">
             <a href="{% url 'post_edit' post.id %}" class="btn-edit">수정</a>
-            <a href="{% url 'post_delete' post.id %}" class="btn-delete">삭제</a>
+            <form action="{% url 'post_delete' post.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-delete">삭제</button>
+            </form>
         </div>
         {% endif %}
     </div>
