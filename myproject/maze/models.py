@@ -26,6 +26,9 @@ class MazeQuestion(models.Model):
     time_limit = models.PositiveIntegerField(default=60) # 제한 시간 (초 단위) (양수 설정)
     score_value = models.PositiveIntegerField(default=10) # 기본 점수 (맞힐 경우)
     hint_available = models.BooleanField(default=True) #힌트 사용 가능 여부
+    #스토리 미궁 관련 추가
+    story_text = models.TextField(blank=True, null=True) #문제를 풀기 전 상황 설명
+    next_question = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL, related_name="next_step") # 다음 문제 연결
 
     def __str__(self):
         return f"[{self.get_level_display()}] 문제 {self.order}: {self.question_text[:30]}..."

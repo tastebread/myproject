@@ -67,6 +67,7 @@ def start_maze(request):
     return redirect('maze_question')
 
 # 문제 출제 (순서대로)
+"""
 def maze_question(request):
     question_order = request.session.get('current_question', 1)  # 현재 문제 순서
     difficulty = request.session.get('difficulty','easy')
@@ -76,6 +77,28 @@ def maze_question(request):
     if not question:
         print("모든 문제 완료. 게임 종료")
         return redirect('maze_complete')  # 모든 문제를 풀면 완료 화면으로 이동
+
+    return render(request, "maze/maze_question.html", {"question": question})
+"""
+#스토리 미궁
+def maze_question(request):
+    """스토리를 포함한 문제를 불러오는 뷰"""
+    progress = MazeProgress.objects.get(user=request.user)
+    question = progress.current_question
+
+    if request.method == "POST":
+        user_answer = request.POST.get("answer", "").strip().lower()
+
+        # 정답 확인 (허용된 정답 리스트 포함)
+        correct_answers = [answer.strip().lower() for answer in question.accepted_answers.split(",")]
+        if user_answer in correct_answers or user_answer == question.answer.strip().lower():
+            # 다음 문제가 있으면 이동, 없으면 클리어
+            if question.next_question:
+                progress.current_question = question.next_question
+            else:
+                progress.completed = True  # 미궁 클리어 처리
+            progress.save()
+            return redirect('maze_question')
 
     return render(request, "maze/maze_question.html", {"question": question})
 
