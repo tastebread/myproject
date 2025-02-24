@@ -30,7 +30,7 @@ def validate_answer(user_answer, correct_answer, accepted_answers):
 def select_difficulty(request):
     if request.method == "POST":
         difficulty = request.POST.get("difficulty")
-        if difficulty in ['easy','medium','hard']:
+        if difficulty in ['easy','normal','hard']:
             request.session['difficulty'] = difficulty
             request.session['current_question'] = 1 #문제 순서 초기화
             request.session['score'] = 0 # 점수 초기화

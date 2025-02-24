@@ -25,4 +25,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),  # 회원 관련 URL
     path('board/', include('board.urls')),  # 게시판 URL 추가!
     path('maze/', include("maze.urls")), #미궁게임 URL 추가
+    path('tinymce/', include('tinymce.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

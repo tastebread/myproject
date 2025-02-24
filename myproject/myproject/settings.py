@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'accounts', #accounts 앱 추가
     'board', #게시판 CRUD 앱 추가
     'maze', #미궁 게임 앱 추가
-    'django_extensions'
+    'django_extensions',
+    'tinymce',
 ]
 
 MIDDLEWARE = [

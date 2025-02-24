@@ -4,7 +4,12 @@
 {% block content %}
 <div class="card">
     <h2>문제 {{ question.order }} ({{ question.get_level_display }})</h2>
-    <p>{{ question.question_text }}</p>
+    <pre>{{ question.question_text }}</pre>
+
+    <!--이미지가 있을 경우-->
+    {% if question.image %}
+        <img src="{{ question.image.url}}" alt="문제 이미지" style="max-width:25%; height:auto;">
+    {% endif %}
 
     <!-- 점수 표시 -->
     <p><strong>현재 점수:</strong> <span id="current-score">{{ request.session.score|default:0 }}</span>점</p>

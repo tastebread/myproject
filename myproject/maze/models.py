@@ -1,15 +1,13 @@
 from django.db import models
-
+from tinymce.models import HTMLField
 class MazeQuestion(models.Model):
     DIFFICULTY_CHOICES = [
         ("easy", "쉬움"),
         ("normal", "보통"),
         ("hard", "어려움"),
-        ("puzzle", '퍼즐/로직'),
-        ("mc", '다지선다형') #다지선다형 문제 예시
         #필요하면 추가 유형을 넣을 수 있음
     ]
-    question_text = models.TextField()  # 문제 내용
+    question_text = HTMLField()  # 문제 내용
     answer = models.CharField(max_length=100)  # 정답
     accepted_answers = models.TextField(
         "허용 정답 (쉼표로 구분)",
@@ -17,11 +15,11 @@ class MazeQuestion(models.Model):
         help_text="여러 정답이 허용될 경우,"
     )
     hint = models.TextField(blank=True, null=True)  # 힌트
-    
+    image = models.ImageField(upload_to='maze_images/', blank=True, null=True) #이미지 추가
     order = models.IntegerField()  # 문제 순서
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['order'], name='unique_maze_question_order')
+            models.UniqueConstraint(fields=['order','level'], name='unique_maze_question_order')
         ]
 
     level = models.CharField(max_length=6, choices=DIFFICULTY_CHOICES, default="easy") #난이도추가
