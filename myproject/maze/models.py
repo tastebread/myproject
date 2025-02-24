@@ -5,9 +5,17 @@ class MazeQuestion(models.Model):
         ("easy", "쉬움"),
         ("normal", "보통"),
         ("hard", "어려움"),
+        ("puzzle", '퍼즐/로직'),
+        ("mc", '다지선다형') #다지선다형 문제 예시
+        #필요하면 추가 유형을 넣을 수 있음
     ]
     question_text = models.TextField()  # 문제 내용
     answer = models.CharField(max_length=100)  # 정답
+    accepted_answers = models.TextField(
+        "허용 정답 (쉼표로 구분)",
+        blank=True,
+        help_text="여러 정답이 허용될 경우,"
+    )
     hint = models.TextField(blank=True, null=True)  # 힌트
     
     order = models.IntegerField()  # 문제 순서
@@ -27,6 +35,14 @@ class MazeQuestion(models.Model):
     def check_answer(self, user_answer):
         """사용자가 입력한 정답이 맞는지 체크"""
         return self.answer.strip().lower() == user_answer.strip().casefold() #국제화 대응
+    
+    @property
+    def is_puzzle(self):
+        return self.level == 'puzzle'
+    
+    @property
+    def is_multiple_choice(self):
+        return self.level == 'mc'
     
 from django.contrib.auth.models import User
 from django.db import models

@@ -7,6 +7,25 @@ from django.contrib.auth.decorators import login_required
 from django.utils.html import escape
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+import re
+
+def normalize(text):
+    """소문자화, 양쪽 공백 제거, 알파벳과 숫자만 남기"""
+    return re.sub(r'[^a-z0-9]', '', text.lower().strip())
+
+def validate_answer(user_answer, correct_answer, accepted_answers):
+    """
+    user_answer와 correct_answer, 그리고 쉼표로 구분된 accepted_answers 중 하나라도 일치하면 True 반환
+    """
+    normalized_user = normalize(user_answer)
+    if normalized_user == normalize(correct_answer):
+        return True
+    if accepted_answers:
+        for ans in accepted_answers.split(','):
+            if normalized_user == normalize(ans):
+                return True
+    return False
+
 #난이도 선택
 def select_difficulty(request):
     if request.method == "POST":
@@ -160,6 +179,3 @@ def question_list(request):
     """모든 미궁 문제를 보여주는 페이지"""
     questions = MazeQuestion.objects.all().order_by('order')
     return render(request, "maze/question_list.html", {"questions": questions})
-
-
-            
