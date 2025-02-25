@@ -1,7 +1,15 @@
-Django
-gunicorn
-psycopg2-binary  # PostgreSQL 데이터베이스 사용 시 필요
-whitenoise  # 정적 파일 서빙
-dj-database-url  # 환경 변수로 DB 설정 가능
-django-extensions
-Pillow
+asgiref==3.8.1
+dj-database-url==2.3.0
+Django==5.1.5
+django-extensions==3.2.3
+django-tinymce==4.1.0
+gunicorn==23.0.0
+Markdown==3.7
+packaging==24.2
+pillow==11.1.0
+psycopg==3.2.5
+python-dotenv==1.0.1
+setuptools==75.1.0
+sqlparse==0.5.3
+typing_extensions==4.12.2
+wheel==0.44.0
