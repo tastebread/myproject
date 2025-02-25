@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -147,6 +148,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static') #프로젝트 내 static 폴더 설정
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #정적 파일 모으는 경로
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 #STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
