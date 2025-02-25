@@ -26,4 +26,5 @@ urlpatterns = [
     path('board/', include('board.urls')),  # 게시판 URL 추가!
     path('maze/', include("maze.urls")), #미궁게임 URL 추가
     path('tinymce/', include('tinymce.urls')),
+    path('',include('board.urls')),  # 기본 URL을 board 뷰에 연결
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -28,7 +28,11 @@ SECRET_KEY = 'django-insecure-5ql)&+*-yd(vs-br72(#-6mw%bf0boab)nivpv)y%tmc2$m7i%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','tastebread.up.railway.app']
+ALLOWED_HOSTS = [
+    'tastebread.up.railway.app',
+    'localhost',
+    '127.0.0.1'
+    ]
 
 
 # Application definition
