@@ -29,7 +29,6 @@ SECRET_KEY = 'django-insecure-5ql)&+*-yd(vs-br72(#-6mw%bf0boab)nivpv)y%tmc2$m7i%
 DEBUG = False
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','tastebread.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['tastebread.up.railway.app']
 
 
 # Application definition
