@@ -59,7 +59,7 @@ class MazeProgress(models.Model):
         return f"{self.user.username} - {self.current_question} (점수: {self.score})"
     
 #점수를 저장하는 Leaderboard 모델
-class leaderboard(models.Model):
+class Leaderboard(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import MazeQuestion,MazeProgress
+from .models import MazeQuestion,MazeProgress,Leaderboard
 import random
 from django.http import JsonResponse
 from .forms import MazeQuestionForm
@@ -218,5 +218,5 @@ def question_list(request):
 
 def leaderboard(request):
     """상위 10명의 랭킹을 보여주는 리더보드"""
-    top_players = leaderboard.objects.all()[:10] #상위 10명 가져오기
+    top_players = Leaderboard.objects.all()[:10] #상위 10명 가져오기
     return render(request, 'maze/leaderboard.html', {'leaderboard': top_players})
