@@ -21,6 +21,7 @@
                     <button type="submit" class="btn btn-primary">로그아웃</button>
                 </form> |
                 <a href="{% url 'select_difficulty' %}" class = "maze-btn"> 미궁 게임 시작</a>
+                <a href="{% url 'leaderboard' %}"> 리더보드 </a>
             {% else %}
                 <a href="{% url 'login' %}">로그인</a> |
                 <a href="{% url 'signup' %}">회원가입</a>

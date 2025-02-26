@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="leaderboard-container">
+    <h2>🏆 리더보드 🏆</h2>
+
+    <table class="leaderboard-table">
+        <tr>
+            <th>순위</th>
+            <th>사용자</th>
+            <th>점수</th>
+            <th>날짜</th>
+        </tr>
+        {% for entry in leaderboard %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ entry.user.username }}</td>
+            <td>{{ entry.score }}</td>
+            <td>{{ entry.date|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="leaderboard-home">
+        <a href="{% url 'post_list' %}" class="btn btn-primary">🏠 홈으로 돌아가기</a>
+    </div>
+</div>
+{% endblock %}

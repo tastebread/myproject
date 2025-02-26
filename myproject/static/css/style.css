@@ -427,3 +427,52 @@ input[type="text"] {
     font-size: 14px;
     margin-top: 10px;
 }
+
+/* 리더보드 스타일 */
+.leaderboard-container {
+    max-width: 600px;
+    margin: 50px auto;
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.leaderboard-table th {
+    background: #007bff;
+    color: white;
+}
+
+.leaderboard-table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.leaderboard-home {
+    margin-top: 20px;
+}
+
+.leaderboard-home .btn {
+    background: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.leaderboard-home .btn:hover {
+    background: #0056b3;
+}

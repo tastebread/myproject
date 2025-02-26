@@ -147,9 +147,12 @@ def submit_answer(request):
 # 게임 완료 페이지
 def maze_complete(request):
     """미궁 완료 페이지 및 게임 초기화 버튼 제공"""
+    if request.user.is_authenticated:
+        final_score = request.session.get('score',0) #현재 세션의 점수 가져오기
+        Leaderboard.objects.create(user=request.user, score=final_score) #점수 저장
     if request.method == "POST":
-        request.session['current_question',None] #현재 문제 초기화
-        request.session['score', None]  # 점수 초기화
+        request.session.pop['current_question',None] #현재 문제 초기화
+        request.session.pop['score', None]  # 점수 초기화
         return redirect('select_difficulty') #다시 난이도 선택으로 이동
     return render(request, 'maze/maze_complete.html', {"score": request.session.get('score', 0)})
 
@@ -212,3 +215,8 @@ def question_list(request):
     """모든 미궁 문제를 보여주는 페이지"""
     questions = MazeQuestion.objects.all().order_by('order')
     return render(request, "maze/question_list.html", {"questions": questions})
+
+def leaderboard(request):
+    """상위 10명의 랭킹을 보여주는 리더보드"""
+    top_players = leaderboard.objects.all()[:10] #상위 10명 가져오기
+    return render(request, 'maze/leaderboard.html', {'leaderboard': top_players})
