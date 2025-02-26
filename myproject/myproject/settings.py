@@ -26,17 +26,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-5ql)&+*-yd(vs-br72(#-6mw%bf0boab)nivpv)y%tmc2$m7i%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # railway로 열었을때 
-"""
 ALLOWED_HOSTS = [
     'tastebread.up.railway.app',
     'localhost',
     '127.0.0.1'
     ]
-"""
-ALLOWED_HOSTS = ['*'] #개인적으로 열었을때
+#ALLOWED_HOSTS = ['*'] #개인적으로 열었을때
 
 CSRF_TRUSTED_ORIGINS = [
     'https://tastebread.up.railway.app',  # Railway 배포된 도메인
