@@ -8,7 +8,7 @@ urlpatterns = [
     path("submit/", views.submit_answer, name='submit_answer'),  # 정답 제출
     path("hint/", views.get_hint, name="get_hint"),  # 힌트 제공
     path('complete/', views.maze_complete, name='maze_complete'),  # 게임 완료
-    path('leaderboard/', views.leaderboard, name='leaderboard')
+    path('leaderboard/', views.leaderboard, name='leaderboard'),
 
     # 문제 관리 관련
     path('questions/manage/', views.manage_maze_questions, name='manage_maze_questions'), # 문제 관리 페이지
