@@ -86,14 +86,17 @@ def maze_question(request):
     progress = MazeProgress.objects.get(user=request.user)
     question = progress.current_question
 
+    print(f"현재 문제: {question.order}") #현재 문제 번호 출력(디버깅)
+
     if request.method == "POST":
         user_answer = request.POST.get("answer", "").strip().lower()
-
         # 정답 확인 (허용된 정답 리스트 포함)
         correct_answers = [answer.strip().lower() for answer in question.accepted_answers.split(",")]
+        
         if user_answer in correct_answers or user_answer == question.answer.strip().lower():
             # 다음 문제가 있으면 이동, 없으면 클리어
             if question.next_question:
+                print(f"다음 문제로 이동: {question.next_question.order}") #다음 문제 확인
                 progress.current_question = question.next_question
             else:
                 progress.completed = True  # 미궁 클리어 처리
@@ -110,7 +113,7 @@ def submit_answer(request):
         question_order = request.session.get('current_question', 1)
         difficulty = request.session.get('difficulty')
         question = MazeQuestion.objects.filter(level=difficulty, order=question_order).first()
-
+        progress,created = MazeProgress.objects.get_or_create(user=request.user)
         if question:
             #타이머가 자동 제출이라면, user_answer가 빈 문자열일 수 있음
             if user_answer == "":
@@ -127,6 +130,8 @@ def submit_answer(request):
                 #  다음 문제 찾기
                 next_question = MazeQuestion.objects.filter(level=difficulty, order=question_order + 1).first()
                 if next_question:
+                    progress.current_question = next_question #DB에도 현재 문제 업데이트
+                    progress.save() #변경 사항 저장
                     request.session['current_question'] = next_question.order
                     print(f"다음 문제 이동 : {next_question.order}")
                     return JsonResponse({"correct": True, "score": request.session['score'], "next_question_url": "/maze/question/"})
@@ -141,6 +146,11 @@ def submit_answer(request):
     return JsonResponse({"error": "Invalid request"}, status=400)
 # 게임 완료 페이지
 def maze_complete(request):
+    """미궁 완료 페이지 및 게임 초기화 버튼 제공"""
+    if request.method == "POST":
+        request.session['current_question',None] #현재 문제 초기화
+        request.session['score', None]  # 점수 초기화
+        return redirect('select_difficulty') #다시 난이도 선택으로 이동
     return render(request, 'maze/maze_complete.html', {"score": request.session.get('score', 0)})
 
 # 힌트 제공 기능

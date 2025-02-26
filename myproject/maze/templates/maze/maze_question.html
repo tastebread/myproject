@@ -7,9 +7,9 @@
     <h2>미궁 탐험<h2>
     <!-- 스토리 설명 표시 -->
     {% if question.story_text %}
-    <pre><strong>📖 스토리:</strong> {{ question.story_text }}</pre>
+    <p><strong>📖 스토리:</strong> {{ question.story_text|safe }}</p>
     {% endif %}
-    <pre>{{ question.question_text }}</pre>
+    <p>{{ question.question_text|safe }}</p>
 
     <!--이미지가 있을 경우-->
     {% if question.image %}
