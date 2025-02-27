@@ -150,6 +150,7 @@ def maze_complete(request):
     if request.user.is_authenticated:
         final_score = request.session.get('score',0) #현재 세션의 점수 가져오기
         Leaderboard.objects.create(user=request.user, score=final_score) #점수 저장
+    
     if request.method == "POST":
         request.session.pop['current_question',None] #현재 문제 초기화
         request.session.pop['score', None]  # 점수 초기화
