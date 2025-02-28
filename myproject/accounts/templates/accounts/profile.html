@@ -16,6 +16,12 @@
     <div class="profile-info">
         <p><strong>생년월일:</strong> {{ profile.birth_date|default:"입력하지 않음" }}</p>
         <p><strong>자기소개:</strong> {{ profile.bio|default:"자기소개 없음" }}</p>
+
+        <!--최고 점수 & 게임 데이터 추가-->
+        <h3> 햔재 미궁 게임 기록</h3>
+        <p> <stroing>최고 점수:</strong> {{ profile.highest_score}}</p>
+        <p> <strong>총 플레이 횟수:</strong> {{profile.games_played}}</p>
+        <p> <strong>마지막 플레이:</strong> {{profile.last_played|date:"Y-m-d H:i"}}</p>    
     </div>
 
     <!-- 프로필 수정 버튼 -->

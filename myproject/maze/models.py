@@ -1,5 +1,6 @@
 from django.db import models
 from tinymce.models import HTMLField
+from django.contrib.auth.models import User
 class MazeQuestion(models.Model):
     DIFFICULTY_CHOICES = [
         ("easy", "쉬움"),
@@ -8,6 +9,7 @@ class MazeQuestion(models.Model):
         #필요하면 추가 유형을 넣을 수 있음
     ]
     question_text = HTMLField()  # 문제 내용
+    image = models.ImageField(upload_to='question_images/', blank=True, null=True)
     answer = models.CharField(max_length=100)  # 정답
     accepted_answers = models.TextField(
         "허용 정답 (쉼표로 구분)",

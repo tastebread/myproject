@@ -8,6 +8,11 @@ class Profile(models.Model):
     profile_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True,verbose_name="자기소개") #프로필 사진
     bio = models.TextField(blank=True, null=True) #자기소개 추가
 
+    #게임 관련 데이터 추가
+    highest_score = models.IntegerField(default=0)  # 최고 점수 저장
+    games_played = models.IntegerField(default=0)  # 총 플레이 횟수 저장
+    last_played = models.DateTimeField(auto_now=True)  # 마지막으로 플레이한 날짜 저장
+
     class Meta:
         verbose_name = "프로필"
         verbose_name_plural = "프로필들"

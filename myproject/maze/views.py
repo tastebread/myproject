@@ -80,6 +80,7 @@ def maze_question(request):
 
     return render(request, "maze/maze_question.html", {"question": question})
 """
+
 #스토리 미궁
 def maze_question(request):
     """스토리를 포함한 문제를 불러오는 뷰"""
@@ -221,3 +222,4 @@ def leaderboard(request):
     """상위 10명의 랭킹을 보여주는 리더보드"""
     top_players = Leaderboard.objects.all()[:10] #상위 10명 가져오기
     return render(request, 'maze/leaderboard.html', {'leaderboard': top_players})
+

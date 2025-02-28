@@ -31,6 +31,18 @@ def profile(request):
     profile = get_object_or_404(Profile, user=request.user) #현재 로그인한 유저의 프로필
     posts = Post.objects.filter(author=request.user).order_by('-created_at') # 내가 작성한 글 가져오기, 최신 순 정렬
     comments = Comment.objects.filter(author=request.user).order_by('-created_at') # 내가 작성한 댓글 가져오기 
+    
+    #미궁 게임 진행 데이터 가져오기 & 업데이트
+    from maze.models import Leaderboard # 리더보드에서 최고 점수 가져오기
+    highest_score_entry = Leaderboard.objects.filter(user=request.user).order_by('-score').first()
+    highest_score = highest_score_entry.score if highest_score_entry else 0 #최고 점수 가져오기
+
+    profile.games_played += 1 # 총 플레이 횟수 증가
+    if highest_score > profile.highest_score:
+        profile.highest_score = highest_score # 최고 점수 업데이트
+    
+    profile.save() # 변경 사항 저장
+
     return render(request,"accounts/profile.html",{
         "profile": profile,
         "posts": posts,
@@ -40,14 +52,19 @@ def profile(request):
 @login_required
 def profile_view(request, username):
     user = get_object_or_404(User, username=username) # 유저가 있는지 확인
-
     profile, created = Profile.objects.get_or_create(user=user)  # 프로필이 없으면 자동 생성
+
+
+    # 사용자의 미궁 게임 최고 점수 가져오기
+    from maze.models import Leaderboard
+    highest_score_entry = Leaderboard.objects.filter(user=user).order_by('-score').first()
+    highest_score = highest_score_entry.score if highest_score_entry else 0  # 최고 점수 가져오기
     
     #사용자가 작성한 게시글 & 댓글 가져오기
     posts = Post.objects.filter(author=user).order_by('-created_at') #최신순 정렬
     comments = Comment.objects.filter(author=user).order_by('-created_at') # 최신순 정렬
     
-    return render(request, 'accounts/profile.html', {'profile': profile, 'user': user, 'posts': posts, 'comments':comments})
+    return render(request, 'accounts/profile.html', {'profile': profile, 'user': user, 'posts': posts, 'comments':comments,'highest_score': highest_score})
 
 @login_required
 def profile_edit(request):
@@ -62,6 +79,8 @@ def profile_edit(request):
         form = ProfileForm(instance=profile)
 
     return render(request, 'accounts/profile_edit.html', {'form': form, 'user': request.user})
+
+
 
 @csrf_exempt
 @login_required
