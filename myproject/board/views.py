@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.views.decorators.http import require_POST
+#
 
 #글 목록
 def post_list(request):
