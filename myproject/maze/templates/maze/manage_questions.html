@@ -18,7 +18,7 @@
         {% for question in questions %}
         <tr>
             <td class="text-center">{{ question.order }}</td>
-            <td class="question-text">{{ question.question_text }}</td>
+            <td class="question-text">{{ question.question_text|safe }}</td>
             <td>{{ question.get_level_display }}</td>
             <td>
                 <a href="{% url 'edit_maze_question' question.id %}" class="btn btn-warning btn-sm mx-1">✏ 수정</a>
