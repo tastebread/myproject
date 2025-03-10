@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_simplejwt', # JWT 인증
+    'rest_framework.authtoken',
     'drf_yasg',
     
     #소셜 로그인 기능.
