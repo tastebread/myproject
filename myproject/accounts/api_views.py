@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Profile
+from .models import Notification
 from .serializers import ProfileSerializer, UserSerializer
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.tokens import default_token_generator
