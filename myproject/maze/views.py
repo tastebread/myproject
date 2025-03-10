@@ -167,7 +167,7 @@ def get_hint(request):
     if question and question.hint:
         return JsonResponse({"hint": question.hint})
     else:
-        return JsonResponse({"hint": "❌ 이 문제는 힌트를 제공하지 않습니다."})
+        return JsonResponse({"hint": " 이 문제는 힌트를 제공하지 않습니다."})
     
 
 # 미궁 문제 리스트 (관리자 전용)

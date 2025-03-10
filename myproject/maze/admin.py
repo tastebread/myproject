@@ -14,8 +14,8 @@ class MazeQuestionAdmin(admin.ModelAdmin):
         models.TextField: {'widget': TinyMCE()},
     }
     fieldsets = (
-        ("문제 정보", {"fields": ("question_text", "answer", "accepted_answers", "hint", "image")}),
         ("스토리 설정", {"fields": ("story_text", "next_question")}),
+        ("문제 정보", {"fields": ("question_text", "image", "answer", "accepted_answers", "hint")}),
         ("기타 설정", {"fields": ("level", "order", "time_limit")}),
     )
 

@@ -10,10 +10,11 @@ class MazeQuestionForm(forms.ModelForm):
     
     class Meta:
         model = MazeQuestion
-        fields = ['question_text', 'answer', 'level','image', 'time_limit', 'hint', 'hint_available', 'order']
+        fields = ['question_text', 'answer','accepted_answers' ,'level','image', 'time_limit', 'hint', 'hint_available', 'order']
         labels = {
             'question_text': '문제 내용',
             'answer': '정답',
+            'accepted_answers' : '허용되는 정답 목록',
             'level': '난이도',
             'time_limit': '제한 시간(초)',
             'hint': '힌트 내용',
