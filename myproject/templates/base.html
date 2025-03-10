@@ -14,7 +14,7 @@
         <nav>
             <a href="{% url 'post_list' %}">게시판</a> |
             {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}">프로필</a> |
+                <a href="/api/accounts/profile/">내 프로필</a>
                 <!-- 로그아웃 버튼을 POST 방식으로 변경-->
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}
