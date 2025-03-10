@@ -72,6 +72,13 @@ INSTALLED_APPS = [
 
 ]
 
+REST_USE_JWT = True  # JWT를 기본 인증 방식으로 사용
+
+# `dj-rest-auth`가 기본적으로 Token 기반 인증을 사용하려고 하므로, 이를 비활성화
+DJ_REST_AUTH = {
+    'TOKEN_MODEL': None,
+}
+
 #소셜 로그인 관련 기능
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
