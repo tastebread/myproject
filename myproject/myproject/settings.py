@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'maze', #미궁 게임 앱 추가
     'django_extensions',
     'tinymce',
+
 ]
 
 MIDDLEWARE = [
@@ -154,7 +155,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static') #프로젝트 내 static 폴더 설정
+    os.path.join(BASE_DIR, 'static'), #프로젝트 내 static 폴더 설정
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #정적 파일 모으는 경로
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
