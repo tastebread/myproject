@@ -12,7 +12,7 @@ urlpatterns = [
     path('', home, name='home'),
     path('login/', LoginView.as_view(template_name='accounts/login.html'),name='login'),
     path('logout/', LogoutView.as_view(next_page='/accounts/login/'), name='logout'),
-    path('profile/', profile, name='profile'), #프로필 페이지 추가
+    path('profile/', profile_view, name='profile'), #프로필 페이지 추가
     path('password_change/', PasswordChangeView.as_view(template_name='accounts/password_change.html'), name='password_change'),
     path('password_change_done/', PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'),name='password_change_done'),
     #비밀번호 재설정 요청 페이지
