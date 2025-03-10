@@ -20,3 +20,13 @@ class Profile(models.Model):
         
     def __str__(self):
         return f"{self.user.username}의 프로필 " # 관리 페이지에서 보기 쉽게 표시
+
+#알람기능
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"알림({self.user.username}): {self.message}"

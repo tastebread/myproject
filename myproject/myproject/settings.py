@@ -59,7 +59,34 @@ INSTALLED_APPS = [
     'django_extensions',
     'tinymce',
 
+    'rest_framework',
+    'rest_framework_simplejwt', # JWT 인증
+    'drf_yasg',
+    
+    #소셜 로그인 기능.
+    'dj_rest_auth',
+    'allauth',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google' 
+
 ]
+
+#소셜 로그인 관련 기능
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+
+# DRF 기본 설정
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
